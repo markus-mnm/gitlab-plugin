@@ -437,7 +437,7 @@ public class GitLabPushTrigger extends Trigger<Job<?, ?>> {
 
     private void onCompletedPushRequest(Run run, GitLabPushCause cause) {
         if(addCiMessage) {
-            cause.getPushRequest().createCommitStatus(this.getDescriptor().getGitlab().instance(), run.getResult()==Result.SUCCESS?"success":"failure", Jenkins.getInstance().getRootUrl() + run.getUrl());
+            cause.getPushRequest().createCommitStatus(this.getDescriptor().getGitlab().instance(), run.getResult()==Result.SUCCESS?"success":"failed", Jenkins.getInstance().getRootUrl() + run.getUrl());
         }
     }
 
@@ -466,7 +466,7 @@ public class GitLabPushTrigger extends Trigger<Job<?, ?>> {
             msg.append(" Jenkins Build ").append(run.getResult().color.getDescription());
             String buildUrl = Jenkins.getInstance().getRootUrl() + run.getUrl();
             msg.append("\n\nResults available at: ")
-                    .append("[").append("Jenkins").append("](").append(buildUrl).append(")");
+                    .append("[").append("Jenkins " + buildUrl).append("](").append(buildUrl).append(")");
             try {
                 GitlabProject proj = new GitlabProject();
                 proj.setId(cause.getMergeRequest().getObjectAttribute().getTargetProjectId());
@@ -478,7 +478,7 @@ public class GitLabPushTrigger extends Trigger<Job<?, ?>> {
         }
 
         if(addCiMessage) {
-            cause.getMergeRequest().createCommitStatus(this.getDescriptor().getGitlab().instance(), run.getResult()==Result.SUCCESS?"success":"failure", Jenkins.getInstance().getRootUrl() + run.getUrl());
+            cause.getMergeRequest().createCommitStatus(this.getDescriptor().getGitlab().instance(), run.getResult()==Result.SUCCESS?"success":"failed", Jenkins.getInstance().getRootUrl() + run.getUrl());
         }
     }
 
